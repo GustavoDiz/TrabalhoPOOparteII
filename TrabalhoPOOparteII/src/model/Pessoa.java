@@ -6,7 +6,7 @@ import java.util.Objects;
 public class Pessoa {
     private long id;
     private String nome;
-    private Sexo sexo;
+    private char sexo;
     private LocalDate nascimento;
     private String usuario;
     private String senha;
@@ -26,11 +26,11 @@ public class Pessoa {
         this.nome = nome;
     }
 
-    public Sexo getSexo() {
+    public char getSexo() {
         return sexo;
     }
 
-    public void setSexo(Sexo sexo) {
+    public void setSexo(char sexo) {
         this.sexo = sexo;
     }
 
