@@ -1,5 +1,7 @@
 package view;
 
+import model.AvaliacaoFisica;
+import model.AvaliacaoFisicaDAO;
 import model.Pessoa;
 import model.PessoaDAO;
 
@@ -15,6 +17,7 @@ import static utils.Utils.jError;
 public class JMenu {
 
     PessoaDAO pessoaDAO = new PessoaDAO();
+    AvaliacaoFisicaDAO avaliacaoFisicaDAO = new AvaliacaoFisicaDAO();
     //USUARIO LOGADO
     static Pessoa userlogged;
 
@@ -50,9 +53,7 @@ public class JMenu {
     public Pessoa jLogin(){
         String username = JOptionPane.showInputDialog("Login");
         String password = JOptionPane.showInputDialog("Senha");
-
-        Pessoa user = pessoaDAO.login(username,password);
-        return user;
+        return pessoaDAO.login(username,password);
     }
 
     public void jRegister() {
@@ -170,4 +171,39 @@ public class JMenu {
 
         }while (op != 7);
     }
+
+    public void jMenuPhysicalAssessment() {
+        String msg = "O Que Gostaria de Fazer? " +
+                "\n 1 - Fazer Avaliação Física" +
+                "\n 2 - Ver Avaliações Antigas" +
+                "\n 0 - Sair";
+        int op;
+        do{
+            op = Integer.parseInt(JOptionPane.showInputDialog(msg));
+            switch (op){
+                case 0:
+                    break;
+                case 1:
+                    jPhysicalAssessment();
+                    break;
+                case 2:
+                    break;
+                default:
+                    jError("Opção Inválida, Por favor Insira novamente");
+                    break;
+            }
+        }while (op != 0);
+    }
+
+    private void jPhysicalAssessment() {
+        String tax = "Qual é sua taxa de atividade: \n 1.2 - Sedentário (pouco ou nenhum exercicio)" +
+                "\n 1.375: levemente ativo (exercício leve 1 a 3 dias por semana) " +
+                "\n 1.55: moderadamente ativo (exercício moderado 6 a 7 dias por semana) " +
+                "\n 1.725: muito ativo (exercício intenso todos os dias ou exercício duas vezes ao dia) " +
+                "\n 1.9: extra ativo (exercício muito difícil, treinamento ou trabalho físico)";
+        AvaliacaoFisica newAssessment = new AvaliacaoFisica();
+        newAssessment.setUser(userlogged);
+        newAssessment.setIdUser(userlogged.getId());
+    }
+
 }

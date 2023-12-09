@@ -8,6 +8,7 @@ import java.util.Objects;
 
 public class AvaliacaoFisica {
     private long id;
+    private long idUser;
     private Pessoa user;
     private double peso;
     private double altura;
@@ -30,6 +31,14 @@ public class AvaliacaoFisica {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(long idUser) {
+        this.idUser = idUser;
     }
 
     public Pessoa getUser() {
