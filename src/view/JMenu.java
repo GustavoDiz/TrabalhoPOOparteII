@@ -18,32 +18,35 @@ public class JMenu {
     static Pessoa userlogged;
 
     public JMenu() {
-        jMenuLogin();
+        jHomepage();
     }
 
-    private void jMenuLogin() {
+    private void jHomepage() {
         int op;
         String[] options = {"Login", "Cadastro", "Sair"};
         do {
             op = JOptionPane.showOptionDialog(null, "Bem Vindo a Nutrisoft!", "Boas Vindas!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-            System.out.println(op);
-//            switch (op) {
-//                case 0:
-//                    //Pessoa user = jLogin();
-//                    if (user == null) {
-//                        jError("Username ou Senha não encontrado!");
-//                    } else {
-//                        userlogged = user;
-//                        jMenu();
-//                    }
-//                    break;
-//                case 1:
-//                    //jRegister();
-//                    break;
-//                default:
-//                    op = 2;
-//                    break;
-//            }
+            switch (op) {
+                case 0:
+                    userlogged = jLogin();
+                    if (userlogged != null){
+
+                    }
+                    break;
+                default:
+                    op = 2;
+                    break;
+            }
         } while (op != 2);
+    }
+
+    public Pessoa jLogin(){
+        String username = JOptionPane.showInputDialog("Login");
+        String password = JOptionPane.showInputDialog("Senha");
+
+        Pessoa user = pessoaDAO.login(username,password);
+
+        System.out.println(user.toString());
+        return user;
     }
 }

@@ -48,6 +48,10 @@ public class PessoaDAO implements DAO<Pessoa>{
                 String nome = rs.getString("nome");
                 String sexo = rs.getString("sexo");
                 Date data = rs.getDate("nascimento");
+                String usuario = rs.getString("usuario");
+                String senha = rs.getString("senha");
+                Date criacao = rs.getDate("dataCriacao");
+                Date modificacao = rs.getDate("dataModificacao");
                 LocalDate nascimento = data.toLocalDate();
 
                 Pessoa p = new Pessoa();
@@ -55,6 +59,10 @@ public class PessoaDAO implements DAO<Pessoa>{
                 p.setNome(nome);
                 p.setSexo(sexo.charAt(0));
                 p.setNascimento(nascimento);
+                p.setUsuario(usuario);
+                p.setSenha(senha);
+                p.setDataCriacao(criacao.toLocalDate());
+                p.setDataModificacao(modificacao.toLocalDate());
                 pessoas.add(p);
 
             }
@@ -156,7 +164,7 @@ public class PessoaDAO implements DAO<Pessoa>{
 
     @Override
     public Pessoa delete(Pessoa elemento) {
-        String sql = "delete from contatos where id = ?";
+        String sql = "delete from pessoa where id = ?";
         try (Connection connection = new ConnectionFactory().getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)){
             stmt.setLong(1,elemento.getId());
@@ -167,4 +175,44 @@ public class PessoaDAO implements DAO<Pessoa>{
         }
         return null;
     }
+
+    public Pessoa login(String username, String password) {
+        String sql = "SELECT * FROM pessoa WHERE usuario = ? and senha = ?";
+        try (Connection connection = new ConnectionFactory().getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Long id = rs.getLong("id");
+                    String nome = rs.getString("nome");
+                    String sexo = rs.getString("sexo");
+                    Date data = rs.getDate("nascimento");
+                    String usuario = rs.getString("usuario");
+                    String senha = rs.getString("senha");
+                    Date criacao = rs.getDate("dataCriacao");
+                    Date modificacao = rs.getDate("dataModificacao");
+                    LocalDate nascimento = data.toLocalDate();
+
+                    Pessoa p = new Pessoa();
+                    p.setId(id);
+                    p.setNome(nome);
+                    p.setSexo(sexo.charAt(0));
+                    p.setNascimento(nascimento);
+                    p.setUsuario(usuario);
+                    p.setSenha(senha);
+                    p.setDataCriacao(criacao.toLocalDate());
+                    p.setDataModificacao(modificacao.toLocalDate());
+
+                    return p;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
 }
