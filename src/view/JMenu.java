@@ -112,12 +112,14 @@ public class JMenu {
                 case 2:
                     jUpdate();
                     break;
+
 //                case 3:
 //                    jMenuPhysicalAssessment();
 //                    break;
-//                case 4:
-//                    jDiet();
-//                    break;
+
+                case 4:
+                  new JmenuFoods();
+                  break;
 //                case 5:
 //                    jSocial();
 //                    break;
