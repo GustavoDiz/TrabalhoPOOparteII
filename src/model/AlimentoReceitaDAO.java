@@ -37,7 +37,7 @@ public class AlimentoReceitaDAO implements DAO<AlimentoReceita>{
     }
 
     @Override
-    public List<AlimentoReceita> list() {
+    public ArrayList<AlimentoReceita> list() {
         String sql = "select * from alimentoreceita";
         ArrayList<AlimentoReceita> alimentos = new ArrayList<>();
         try (
