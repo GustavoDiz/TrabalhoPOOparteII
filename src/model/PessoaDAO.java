@@ -5,7 +5,6 @@ import utils.ConnectionFactory;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 public class PessoaDAO implements DAO<Pessoa>{
     @Override
@@ -64,12 +63,40 @@ public class PessoaDAO implements DAO<Pessoa>{
     }
 
     @Override
-    public Pessoa update(Pessoa elemento) {
+    public Pessoa update(Pessoa elemento, int op) {
+        String sql;
+        switch (op){
+            case 1:
+                sql = "update pessoa set nome = ? where id = ?";
+                break;
+            case 2:
+                sql = "update pessoa set sexo = ? where id = ?";
+                break;
+            case 3:
+                sql = "update pessoa set nascimento = ? where id = ?";
+                break;
+            case 4:
+                sql = "update pessoa set usuario = ? where id = ?";
+                break;
+            case 5:
+                sql = "update pessoa set senha = ? where id = ?";
+                break;
+        }
+
         return null;
     }
 
     @Override
     public Pessoa delete(Pessoa elemento) {
+        String sql = "delete from contatos where id = ?";
+        try (Connection connection = new ConnectionFactory().getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)){
+            stmt.setLong(1,elemento.getId());
+            stmt.execute();
+            System.out.println("Elemento excluído com sucesso.");
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
         return null;
     }
 }
