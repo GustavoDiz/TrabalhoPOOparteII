@@ -177,7 +177,7 @@ public class PessoaDAO implements DAO<Pessoa>{
     }
 
     public Pessoa login(String username, String password) {
-        String sql = "SELECT * FROM pessoa WHERE usuario = ? and senha = ?";
+        String sql = "SELECT * FROM pessoa WHERE usuario = ? AND senha = ?";
         try (Connection connection = new ConnectionFactory().getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
