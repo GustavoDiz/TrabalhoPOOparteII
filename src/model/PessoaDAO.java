@@ -2,9 +2,11 @@ package model;
 
 import utils.ConnectionFactory;
 
+import javax.swing.text.AbstractDocument;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class PessoaDAO implements DAO<Pessoa>{
     @Override
@@ -67,23 +69,88 @@ public class PessoaDAO implements DAO<Pessoa>{
         String sql;
         switch (op){
             case 1:
-                sql = "update pessoa set nome = ? where id = ?";
+                sql = "update pessoa set nome = ?,dataModificacao = ? where id = ?";
+                try (Connection connection = new ConnectionFactory().getConnection();
+                     PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+                    stmt.setString(1, elemento.getNome());
+                    stmt.setDate(2, Date.valueOf(LocalDate.now()));
+                    stmt.setLong(3, elemento.getId());
+
+                    stmt.execute();
+
+                    System.out.println("Elemento Atualizado com sucesso.");
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
             case 2:
-                sql = "update pessoa set sexo = ? where id = ?";
+                sql = "update pessoa set sexo = ?,dataModificacao = ? where id = ?";
+                try (Connection connection = new ConnectionFactory().getConnection();
+                     PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+                    stmt.setString(1, String.valueOf(elemento.getSexo()));
+                    stmt.setDate(2, Date.valueOf(LocalDate.now()));
+                    stmt.setLong(3, elemento.getId());
+
+                    stmt.execute();
+
+                    System.out.println("Elemento Atualizado com sucesso.");
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
             case 3:
-                sql = "update pessoa set nascimento = ? where id = ?";
+                sql = "update pessoa set nascimento = ?,dataModificacao = ? where id = ?";
+                try (Connection connection = new ConnectionFactory().getConnection();
+                     PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+                    stmt.setDate(1, Date.valueOf(elemento.getNascimento()));
+                    stmt.setDate(2, Date.valueOf(LocalDate.now()));
+                    stmt.setLong(3, elemento.getId());
+
+                    stmt.execute();
+
+                    System.out.println("Elemento Atualizado com sucesso.");
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
             case 4:
-                sql = "update pessoa set usuario = ? where id = ?";
+                sql = "update pessoa set usuario = ?,dataModificacao = ? where id = ?";
+                try (Connection connection = new ConnectionFactory().getConnection();
+                     PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+                    stmt.setString(1, elemento.getUsuario());
+                    stmt.setDate(2, Date.valueOf(LocalDate.now()));
+                    stmt.setLong(3, elemento.getId());
+
+                    stmt.execute();
+
+                    System.out.println("Elemento Atualizado com sucesso.");
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
             case 5:
-                sql = "update pessoa set senha = ? where id = ?";
+                sql = "update pessoa set senha = ?,dataModificacao = ? where id = ?";
+                try (Connection connection = new ConnectionFactory().getConnection();
+                     PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+                    stmt.setString(1, elemento.getSenha());
+                    stmt.setDate(2, Date.valueOf(LocalDate.now()));
+                    stmt.setLong(3, elemento.getId());
+
+                    stmt.execute();
+
+                    System.out.println("Elemento Atualizado com sucesso.");
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
         }
 
-        return null;
+        return elemento;
     }
 
 
