@@ -4,6 +4,7 @@ import model.AlimentoReceita;
 import model.AlimentoReceitaDAO;
 import model.Preferencia;
 import model.PreferenciaDAO;
+import model.Mensagem;
 
 import javax.swing.*;
 
@@ -39,7 +40,7 @@ public class JmenuFoods {
                 case 0:
                     break;
                 case 1:
-                    //                   jTypeDiet();
+                    new jMenuDiet();
                     break;
                 case 2:
                     //                   jRegisterDiet();
@@ -149,20 +150,18 @@ public class JmenuFoods {
                     foods.delete(alimentoDelete);
                     break;
                 case 5:
+                    StringBuilder elementos = new StringBuilder();
                     ArrayList<AlimentoReceita> FoodsExamples = new ArrayList<>();
                     FoodsExamples = foods.list();
 
                     if (!FoodsExamples.isEmpty()) {
                         for (AlimentoReceita alimento : FoodsExamples) {
-
-                            System.out.println("\t\t" + alimento);
+                            elementos.append(alimento.toString());
                         }
                     } else {
                         System.out.println("\n\nNenhum elemento encontrado!! Verifique se você já criou algum");
                     }
-
-                    break;
-
+                    JOptionPane.showMessageDialog(null,new JTextArea(elementos.toString()));
                 default:
                     jError("Opção Inválida, Por favor insira novamente.");
                     break;
@@ -224,9 +223,10 @@ public class JmenuFoods {
         AlimentoReceita newreceipss = new AlimentoReceita();
         {
             newreceipss.setNome(JOptionPane.showInputDialog("Insira o nome do novo alimento"));
-            newreceipss.setCarboidratos(Double.parseDouble(JOptionPane.showInputDialog("Digite a quantidade de carboidratos desse alimento")));
+            newreceipss.setCarboidratos(Double.parseDouble(JOptionPane.showInputDialog("Digite a quantidade de carboidratos de-sse alimento")));
             newreceipss.setProteinas(Double.parseDouble(JOptionPane.showInputDialog("Digite a quantidade de de proteinas desse alimento")));
             newreceipss.setGorduras(Double.parseDouble(JOptionPane.showInputDialog("Digite a quantidade de gorduras desse alimento")));
+            newreceipss.setPorcao(Double.parseDouble(JOptionPane.showInputDialog("Digite a porção desse alimento")));
             newreceipss.setCalorias();
             newreceipss.setDataCriacao(LocalDate.now());
             newreceipss.setDataModificacao(LocalDate.now());
