@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class TipoDieta {
-    private int id;
+    private long id;
     private String nome;
     private double carboidrato;
     private double proteina;
@@ -13,9 +13,12 @@ public class TipoDieta {
     private LocalDate dataCriacao;
     private LocalDate dataModificacao;
 
-    public int getId() {
+    public void setId(long id){this.id = id;}
+
+    public long getId() {
         return id;
     }
+
 
     public String getNome() {
         return nome;
@@ -80,15 +83,7 @@ public class TipoDieta {
 
     @Override
     public String toString() {
-        return "TipoDieta{" +
-                "id='" + id + '\'' +
-                ", nome='" + nome + '\'' +
-                ", carboidrato=" + carboidrato +
-                ", proteina=" + proteina +
-                ", gordura=" + gordura +
-                ", dataCriacao=" + dataCriacao +
-                ", dataModificacao=" + dataModificacao +
-                '}';
+        return String.format("\n%d\t%s\t%.2f\t%.2f\t%.2f\n",
+                id, nome, carboidrato, proteina, gordura);
     }
-
 }

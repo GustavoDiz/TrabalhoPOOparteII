@@ -76,7 +76,7 @@ public class AlimentoReceita{
     }
     @Override
     public String toString() {
-        return String.format("%d\t%s\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n",
+        return String.format("\n%d\t%s\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n",
                 id, nome, carboidratos, proteinas, gorduras, calorias, porcao);
     }
 

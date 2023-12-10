@@ -1,8 +1,6 @@
 package view;
 
-import model.AlimentoReceita;
-import model.AlimentoReceitaDAO;
-import model.Mensagem;
+import model.*;
 
 import javax.swing.*;
 
@@ -17,6 +15,7 @@ import static view.JMenu.userlogged;
 public class JmenuFoods {
 
     AlimentoReceitaDAO foods = new AlimentoReceitaDAO();
+    TipoDietaDAO diets = new TipoDietaDAO();
 
     public JmenuFoods() {
         jDiet();
@@ -38,7 +37,7 @@ public class JmenuFoods {
                 case 0:
                     break;
                 case 1:
-                    new jMenuDiet();
+                    jTypeDiet();
                     break;
                 case 2:
                     //                   jRegisterDiet();
@@ -94,6 +93,7 @@ public class JmenuFoods {
                     break;
                 case 5:
                     StringBuilder elementos = new StringBuilder();
+                    elementos.append("Id\tNome\tCarboidratos\tProteina\tGordura\tCalorias\tPorção\n");
                     ArrayList<AlimentoReceita> FoodsExamples = new ArrayList<>();
                     FoodsExamples = foods.list();
 
@@ -105,6 +105,8 @@ public class JmenuFoods {
                         System.out.println("\n\nNenhum elemento encontrado!! Verifique se você já criou algum");
                     }
                     JOptionPane.showMessageDialog(null,new JTextArea(elementos.toString()));
+
+                    break;
                 default:
                     jError("Opção Inválida, Por favor insira novamente.");
                     break;
@@ -162,6 +164,42 @@ public class JmenuFoods {
         }while (op != 6);
 
     }
+
+    private void jTypeDiet() {
+        int op;
+        String txt = "O que deseja?" +
+                "\n 1 - Criar Novo Tipo de Dieta" +
+                "\n 2 - Ver Tipos de Dieta " +
+                "\n 3 - Sair";
+        do {
+            op = Integer.parseInt(JOptionPane.showInputDialog(txt));
+            switch (op) {
+                case 1:
+                    createDiet();
+                    break;
+                case 2:
+                    StringBuilder dietss = new StringBuilder();
+                    dietss.append("ID\tNome\tCarboidratos\t Proteina \tGorduras\n");
+                    ArrayList<TipoDieta> diets11 = new ArrayList<>();
+                    diets11 = diets.list();
+
+                    if (!diets11.isEmpty()) {
+                        for (TipoDieta d : diets11) {
+                            dietss.append(d.toString());
+                        }
+                    } else {
+                        System.out.println("\n\nNenhuma dieta encontrada!! Verifique se você já criou algum");
+                    }
+                    JOptionPane.showMessageDialog(null,new JTextArea(dietss.toString()));
+
+                    break;
+
+                default:
+                    jError("Opção Inválida, Por favor insira novamente.");
+                    break;
+            }
+        } while (op != 3);
+    }
     private void createRecipe() {
         AlimentoReceita newreceipss = new AlimentoReceita();
         {
@@ -176,6 +214,23 @@ public class JmenuFoods {
 
             foods.add(newreceipss);
             JOptionPane.showMessageDialog(null, "Alimento criado com sucesso");
+        }
+    }
+
+    private void createDiet() {
+        TipoDieta newdiet = new TipoDieta();
+        {
+            newdiet.setNome(JOptionPane.showInputDialog("Insira o nome da nova dieta"));
+            newdiet.setCarboidrato(Double.parseDouble(JOptionPane.showInputDialog("Insira a quantidade de carboidratos da nova dieta")));
+            newdiet.setProteina(Double.parseDouble(JOptionPane.showInputDialog("Insira a quantidade de proteinas da nova dieta")));
+            newdiet.setGordura(Double.parseDouble(JOptionPane.showInputDialog("Insira a quantidade de gorduras da nova dieta")));
+            newdiet.setDataCriacao(LocalDate.now());
+            newdiet.setDataModificacao(LocalDate.now());
+
+            System.out.println(newdiet);
+
+            diets.add(newdiet);
+            JOptionPane.showMessageDialog(null, "Dieta base Adicionada com sucesso!!");
         }
     }
 }
