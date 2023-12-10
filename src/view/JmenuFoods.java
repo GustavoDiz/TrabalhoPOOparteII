@@ -6,15 +6,17 @@ import model.AlimentoReceitaDAO;
 import javax.swing.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import static utils.Utils.jConfirmation;
 import static utils.Utils.jError;
+
 
 public class JmenuFoods {
 
     AlimentoReceitaDAO foods = new AlimentoReceitaDAO();
 
-    public JmenuFoods(){
+    public JmenuFoods() {
         jDiet();
     }
 
@@ -60,7 +62,7 @@ public class JmenuFoods {
         do {
             opcao = Integer.parseInt(JOptionPane.showInputDialog("Bem vindo ao menu de dietas, informe o que você deseja \n" +
                     "1 - Criar novo alimento \n" +
-                    "2 - Verificar alimentos por nome \n" +
+                    "2 - Verificar alimentos por ID \n" +
                     "3 - Atualizar alimentos\n" +
                     "4 - Excluir alimentos  \n" +
                     "5 - Verificar alimentos existentes \n" +
@@ -72,8 +74,8 @@ public class JmenuFoods {
                     createRecipe();
                     break;
                 case 2:
-                    int id  = Integer.parseInt(JOptionPane.showInputDialog("Por favor, informe o ID do alimento"));
-                    AlimentoReceita alimento2  = foods.getRecipeByIDFood(id);
+                    int id = Integer.parseInt(JOptionPane.showInputDialog("Por favor, informe o ID do alimento"));
+                    AlimentoReceita alimento2 = foods.getRecipeByIDFood(id);
                     if (alimento2 != null) {
                         jConfirmation("Dados do Alimento \n\n" + alimento2.toString());
                     } else {
@@ -81,31 +83,86 @@ public class JmenuFoods {
                     }
                     break;
                 case 3:
- /*
+                    jMenuAtt();
                     break;
                 case 4:
-                    int idDelete  = Integer.parseInt(JOptionPane.showInputDialog("Por favor, informe o nome desse alimento"));
-//                    foods.deleteRecipe(idDelete);
-                    if (foods.deleteRecipe(idDelete)){
-                        jConfirmation("Comida Deletada com Sucesso");
-                    }else{
-                        jError("Comida não Encontrada, Por favor insira novamente");
-                    }
+                    int idDelete = Integer.parseInt(JOptionPane.showInputDialog("Por favor, informe o ID desse alimento"));
+                    AlimentoReceita alimentoDelete = foods.getRecipeByIDFood(idDelete);
+                    foods.delete(alimentoDelete);
                     break;
                 case 5:
-                    foodsExemples();
+                    ArrayList<AlimentoReceita> FoodsExamples = new ArrayList<>();
+                    FoodsExamples = foods.list();
+
+                    if (!FoodsExamples.isEmpty()) {
+                        for (AlimentoReceita alimento : FoodsExamples) {
+
+                            System.out.println("\t\t" + alimento);
+                        }
+                    } else {
+                        System.out.println("\n\nNenhum elemento encontrado!! Verifique se você já criou algum");
+                    }
+
                     break;
 
-                    */
                 default:
                     jError("Opção Inválida, Por favor insira novamente.");
                     break;
             }
-        } while (opcao != 0);
+
+        }while (opcao != 0) ;
     }
 
-    private void createRecipe() {
+    private void jMenuAtt(){
+        int id  = Integer.parseInt(JOptionPane.showInputDialog("Por favor, informe o ID do alimento"));
+        AlimentoReceita alimentoUpdate  = new AlimentoReceita();
+        alimentoUpdate = foods.getRecipeByIDFood(id);
 
+        int op;
+        String menuUpdate =
+                "\n Qual seria o campo a ser atualizado? "
+                + "\n 1 - Nome do alimento "
+                + "\n 2 - Carboidratos "
+                + "\n 3 - Proteínas "
+                + "\n 4 - Gorduras "
+                + "\n 5 - Porcao "
+                + "\n 6 - Sair ";
+        do{
+            op = Integer.parseInt(JOptionPane.showInputDialog(menuUpdate));
+            switch (op){
+                case 1:
+                    alimentoUpdate.setNome(JOptionPane.showInputDialog("Insira o Novo nome"));
+                    foods.update(alimentoUpdate,op);
+                    break;
+                case 2:
+                    alimentoUpdate.setCarboidratos(Double.parseDouble(JOptionPane.showInputDialog("Insira a nova data de nascimento Exemplo 25-09-1999")));
+                    alimentoUpdate.setCalorias();
+                    foods.update(alimentoUpdate,op);
+                    break;
+                case 3:
+                    alimentoUpdate.setProteinas(Double.parseDouble(JOptionPane.showInputDialog("Insira a nova quantidade de proteínas")));
+                    alimentoUpdate.setCalorias();
+                    foods.update(alimentoUpdate,op);
+                    break;
+                case 4:
+                    alimentoUpdate.setGorduras(Double.parseDouble(JOptionPane.showInputDialog("Insira a nova quantidade de gorduras")));
+                    alimentoUpdate.setCalorias();
+                    foods.update(alimentoUpdate,op);
+                    break;
+                case 5:
+                    alimentoUpdate.setPorcao(Double.parseDouble(JOptionPane.showInputDialog("Insira a nova porção")));
+                    foods.update(alimentoUpdate,op);
+                    break;
+                case 0:
+                    break;
+                default:
+                    jError("Opção Invalida, Por favor insira novamente.");
+                    break;
+            }
+        }while (op != 6);
+
+    }
+    private void createRecipe() {
         AlimentoReceita newreceipss = new AlimentoReceita();
         {
             newreceipss.setNome(JOptionPane.showInputDialog("Insira o nome do novo alimento"));
@@ -120,7 +177,4 @@ public class JmenuFoods {
             JOptionPane.showMessageDialog(null, "Alimento criado com sucesso");
         }
     }
-
-
-
 }

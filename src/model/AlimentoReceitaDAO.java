@@ -95,13 +95,14 @@ public class AlimentoReceitaDAO implements DAO<AlimentoReceita>{
                 }
                 break;
             case 2:
-                sql = "update alimentoreceita set carboidratos = ?,dataModificacao = ? where id = ?";
+                sql = "update alimentoreceita set carboidratos = ?, calorias = ?,dataModificacao = ? where id = ?";
                 try (Connection connection = new ConnectionFactory().getConnection();
                      PreparedStatement stmt = connection.prepareStatement(sql)) {
 
                     stmt.setString(1, String.valueOf(elemento.getCarboidratos()));
-                    stmt.setDate(2, Date.valueOf(LocalDate.now()));
-                    stmt.setLong(3, elemento.getId());
+                    stmt.setString(2, String.valueOf(elemento.getCalorias()));
+                    stmt.setDate(3, Date.valueOf(LocalDate.now()));
+                    stmt.setLong(4, elemento.getId());
 
                     stmt.execute();
 
@@ -109,16 +110,18 @@ public class AlimentoReceitaDAO implements DAO<AlimentoReceita>{
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
+
                 break;
 
             case 3:
-            sql = "update alimentoreceita set proteinas = ?,dataModificacao = ? where id = ?";
+            sql = "update alimentoreceita set proteinas = ?, calorias = ?,dataModificacao = ? where id = ?";
             try (Connection connection = new ConnectionFactory().getConnection();
                  PreparedStatement stmt = connection.prepareStatement(sql)) {
 
                 stmt.setString(1, String.valueOf(elemento.getProteinas()));
-                stmt.setDate(2, Date.valueOf(LocalDate.now()));
-                stmt.setLong(3, elemento.getId());
+                stmt.setString(2, String.valueOf(elemento.getProteinas()));
+                stmt.setDate(3, Date.valueOf(LocalDate.now()));
+                stmt.setLong(4, elemento.getId());
 
                 stmt.execute();
 
@@ -129,13 +132,14 @@ public class AlimentoReceitaDAO implements DAO<AlimentoReceita>{
             break;
 
             case 4:
-            sql = "update alimentoreceita set gorduras = ?,dataModificacao = ? where id = ?";
+            sql = "update alimentoreceita set gorduras = ?, calorias = ?,dataModificacao = ? where id = ?";
             try (Connection connection = new ConnectionFactory().getConnection();
                  PreparedStatement stmt = connection.prepareStatement(sql)) {
 
                 stmt.setString(1, String.valueOf(elemento.getGorduras()));
-                stmt.setDate(2, Date.valueOf(LocalDate.now()));
-                stmt.setLong(3, elemento.getId());
+                stmt.setString(2, String.valueOf(elemento.getCalorias()));
+                stmt.setDate(3, Date.valueOf(LocalDate.now()));
+                stmt.setLong(4, elemento.getId());
 
                 stmt.execute();
 
@@ -146,23 +150,6 @@ public class AlimentoReceitaDAO implements DAO<AlimentoReceita>{
             break;
 
             case 5:
-            sql = "update alimentoreceita set calorias = ?,dataModificacao = ? where id = ?";
-            try (Connection connection = new ConnectionFactory().getConnection();
-                 PreparedStatement stmt = connection.prepareStatement(sql)) {
-
-                stmt.setString(1, String.valueOf(elemento.getCalorias()));
-                stmt.setDate(2, Date.valueOf(LocalDate.now()));
-                stmt.setLong(3, elemento.getId());
-
-                stmt.execute();
-
-                System.out.println("Elemento Atualizado com sucesso.");
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-            break;
-
-            case 6:
             sql = "update alimentoreceita set porcao = ?,dataModificacao = ? where id = ?";
             try (Connection connection = new ConnectionFactory().getConnection();
                  PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -180,6 +167,7 @@ public class AlimentoReceitaDAO implements DAO<AlimentoReceita>{
             break;
 
         }
+
         return elemento;
     }
 
