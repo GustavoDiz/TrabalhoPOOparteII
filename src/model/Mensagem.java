@@ -5,7 +5,9 @@ import java.util.Objects;
 
 public class Mensagem {
     private long id;
-    private long sender;
+    private long senderId;
+    private Pessoa sender;
+    private long recipientId;
     private Pessoa recipient;
     private String msg;
     private LocalDate dataCriacao;
@@ -19,12 +21,28 @@ public class Mensagem {
         this.id = id;
     }
 
-    public long getSender() {
+    public long getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(long senderId) {
+        this.senderId = senderId;
+    }
+
+    public Pessoa getSender() {
         return sender;
     }
 
-    public void setSender(long sender) {
+    public void setSender(Pessoa sender) {
         this.sender = sender;
+    }
+
+    public long getRecipientId() {
+        return recipientId;
+    }
+
+    public void setRecipientId(long recipientId) {
+        this.recipientId = recipientId;
     }
 
     public Pessoa getRecipient() {
@@ -59,16 +77,11 @@ public class Mensagem {
         this.dataModificacao = dataModificacao;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Mensagem mensagem = (Mensagem) o;
-        return id == mensagem.id && sender == mensagem.sender && Objects.equals(recipient, mensagem.recipient) && Objects.equals(msg, mensagem.msg) && Objects.equals(dataCriacao, mensagem.dataCriacao) && Objects.equals(dataModificacao, mensagem.dataModificacao);
-    }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, sender, recipient, msg, dataCriacao, dataModificacao);
+    public String toString() {
+        return  "\n Usuário "+ sender.getNome() +
+                "\n" + msg + '\'' +
+                "\n --------------- ";
     }
 }

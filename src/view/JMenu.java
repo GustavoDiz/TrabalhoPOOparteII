@@ -1,9 +1,6 @@
 package view;
 
-import model.AvaliacaoFisica;
-import model.AvaliacaoFisicaDAO;
-import model.Pessoa;
-import model.PessoaDAO;
+import model.*;
 
 import javax.swing.*;
 import java.time.LocalDate;
@@ -17,6 +14,7 @@ import static utils.Utils.jError;
 public class JMenu {
 
     PessoaDAO pessoaDAO = new PessoaDAO();
+    SeguirDAO seguirDAO = new SeguirDAO();
     AvaliacaoFisicaDAO avaliacaoFisicaDAO = new AvaliacaoFisicaDAO();
     //USUARIO LOGADO
     static Pessoa userlogged;
@@ -72,8 +70,6 @@ public class JMenu {
             }
         }while(true);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
         do{
                 String dataNascimentoInput = JOptionPane.showInputDialog("Insira a data de nascimento Exemplo 25-09-1999");
                 LocalDate dateFormat = LocalDate.parse(dataNascimentoInput);
@@ -83,12 +79,19 @@ public class JMenu {
 
         newUser.setUsuario(JOptionPane.showInputDialog("Insira o novo login"));
         newUser.setSenha(JOptionPane.showInputDialog("Insira o Novo Senha"));
-
-
         newUser.setDataCriacao(LocalDate.now());
         newUser.setDataModificacao(LocalDate.now());
 
-        pessoaDAO.add(newUser);
+        Pessoa p = pessoaDAO.add(newUser);
+
+
+
+        Seguir selfFollow = new Seguir();
+        selfFollow.setFollowed(p.getId());
+        selfFollow.setFollower(p.getId());
+        selfFollow.setDataCriacao(LocalDate.now());
+        selfFollow.setDataModificacao(LocalDate.now());
+        seguirDAO.add(selfFollow);
     }
 
     public  void jMenu() {

@@ -15,7 +15,7 @@ public class PessoaDAO implements DAO<Pessoa>{
                      "(nome, sexo, nascimento, usuario, senha, dataCriacao, dataModificacao) " +
                      "values (?,?,?,?,?,?,?)";
         try (Connection connection = new ConnectionFactory().getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)){
+             PreparedStatement stmt = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)){
             stmt.setString(1,elemento.getNome());
             stmt.setString(2,elemento.getSexo()+"");
             stmt.setDate(3,java.sql.Date.valueOf(elemento.getNascimento()));
@@ -23,9 +23,12 @@ public class PessoaDAO implements DAO<Pessoa>{
             stmt.setString(5,elemento.getSenha());
             stmt.setDate(6,java.sql.Date.valueOf(elemento.getDataCriacao()));
             stmt.setDate(7,java.sql.Date.valueOf(elemento.getDataModificacao()));
-
             stmt.execute();
 
+            ResultSet key = stmt.getGeneratedKeys();
+            if (key.next()) {
+                elemento.setId(key.getLong(1)); // Supondo que a chave primária seja do tipo LONG
+            }
             System.out.println("Elemento inserido com sucesso.");
         }catch (SQLException e){
             throw  new RuntimeException(e);
@@ -183,6 +186,44 @@ public class PessoaDAO implements DAO<Pessoa>{
 
             stmt.setString(1, username);
             stmt.setString(2, password);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Long id = rs.getLong("id");
+                    String nome = rs.getString("nome");
+                    String sexo = rs.getString("sexo");
+                    Date data = rs.getDate("nascimento");
+                    String usuario = rs.getString("usuario");
+                    String senha = rs.getString("senha");
+                    Date criacao = rs.getDate("dataCriacao");
+                    Date modificacao = rs.getDate("dataModificacao");
+                    LocalDate nascimento = data.toLocalDate();
+
+                    Pessoa p = new Pessoa();
+                    p.setId(id);
+                    p.setNome(nome);
+                    p.setSexo(sexo.charAt(0));
+                    p.setNascimento(nascimento);
+                    p.setUsuario(usuario);
+                    p.setSenha(senha);
+                    p.setDataCriacao(criacao.toLocalDate());
+                    p.setDataModificacao(modificacao.toLocalDate());
+
+                    return p;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    public Pessoa findUser(String name) {
+        String sql = "SELECT * FROM pessoa WHERE nome = ?";
+        try (Connection connection = new ConnectionFactory().getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setString(1, name);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {

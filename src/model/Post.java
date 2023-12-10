@@ -71,4 +71,11 @@ public class Post {
     public int hashCode() {
         return Objects.hash(id, userId, user, msg, dataCriacao, dataModificacao);
     }
+
+    @Override
+    public String toString() {
+        return  "\n user=" + user.getNome() +
+                "\n msg='" + msg + '\n' +
+                "-------------------------";
+    }
 }

@@ -45,30 +45,41 @@ public class PostDAO implements DAO<Post>{
         return null;
     }
 
-    public ArrayList<Post> listMyPosts(int id){
-        String sql = "select p.msg,p.user_id,p.dataCriacao,p.dataModificacao from post p " +
-                    "INNER JOIN seguir s ON p.user_id = s.followed_id" +
-                    "where s.follower = ?";
-        ArrayList<Post>  posts = new ArrayList<>();
+    public ArrayList<Post> listMyPosts(long id){
+        String sql = "SELECT p.id, p.msg, p.user_id, p.dataCriacao, p.dataModificacao, pessoa.nome " +
+                "FROM post p " +
+                "INNER JOIN seguir s ON p.user_id = s.followed_id " +
+                "INNER JOIN pessoa ON p.user_id = pessoa.id " +
+                "WHERE s.follower_id = ?";
+
+        ArrayList<Post> posts = new ArrayList<>();
         try (
                 Connection connection = new ConnectionFactory().getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql);
-                ResultSet rs = stmt.executeQuery(sql)
         ) {
-            while (rs.next()){
-               Post post = new Post();
-                post.setId(rs.getLong("id"));
-                post.setMsg(rs.getString("msg"));
-                post.setUserId(rs.getLong("user_id"));
-                post.setDataCriacao(rs.getDate("dataCriacao").toLocalDate());
-                post.setDataModificacao(rs.getDate("dataModificacao").toLocalDate());
+            stmt.setLong(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Post post = new Post();
+                    post.setId(rs.getLong("id"));
+                    post.setMsg(rs.getString("msg"));
+                    post.setUserId(rs.getLong("user_id"));
+                    post.setDataCriacao(rs.getDate("dataCriacao").toLocalDate());
+                    post.setDataModificacao(rs.getDate("dataModificacao").toLocalDate());
 
-                posts.add(post);
+                    Pessoa pessoa = new Pessoa();
+                    pessoa.setNome(rs.getString("nome"));
+                    post.setUser(pessoa);
+
+                    posts.add(post);
+                }
             }
-        }catch (SQLException e){
-            throw  new RuntimeException(e);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return  posts;
+        return posts;
     }
+
 
 }
