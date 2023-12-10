@@ -76,17 +76,10 @@ public class AlimentoReceita{
     }
     @Override
     public String toString() {
-        return  "\nid= \t" + id +
-                "\n nome= \t" + nome +
-                "\n carboidratos = \t" + carboidratos +
-                "\n proteinas = \t" + proteinas +
-                "\n gorduras = \t" + gorduras +
-                "\n calorias = \t" + calorias +
-                "\n porcao = \t" + porcao +
-                "\n dataCriacao = \t" + dataCriacao +
-                "\n dataModificacao = \t" + dataModificacao +
-                '\n';
+        return String.format("%d\t%s\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n",
+                id, nome, carboidratos, proteinas, gorduras, calorias, porcao);
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -100,4 +93,5 @@ public class AlimentoReceita{
     public int hashCode() {
         return Objects.hash(getId(), getNome(), getCarboidratos(), getProteinas(), getGorduras(), getCalorias(), getPorcao(), dataCriacao, dataModificacao);
     }
+
 }
