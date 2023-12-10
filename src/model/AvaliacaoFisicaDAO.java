@@ -27,8 +27,12 @@ public class AvaliacaoFisicaDAO implements DAO<AvaliacaoFisica> {
             stmt.setDouble(11,elemento.getTbm());
             stmt.setDouble(12,elemento.getMassaGorda());
             stmt.setDouble(13,elemento.getMassaMagra());
-            stmt.setDate(6,java.sql.Date.valueOf(elemento.getDataCriacao()));
-            stmt.setDate(7,java.sql.Date.valueOf(elemento.getDataModificacao()));
+            stmt.setDate(14,java.sql.Date.valueOf(elemento.getDataCriacao()));
+            stmt.setDate(15,java.sql.Date.valueOf(elemento.getDataModificacao()));
+
+            stmt.execute();
+
+            System.out.println("Elemento Adicionado com Sucesso");
         }catch (SQLException e){
             throw  new RuntimeException(e);
         }
@@ -108,5 +112,56 @@ public class AvaliacaoFisicaDAO implements DAO<AvaliacaoFisica> {
             throw new RuntimeException(e);
         }
         return  null;
+    }
+
+    public ArrayList<AvaliacaoFisica> myList (long id){
+        ArrayList<AvaliacaoFisica> result = new ArrayList<>();
+        String sql = "select * from avaliacaofisica where pessoa_id = ?";
+        try (Connection connection = new ConnectionFactory().getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1,id);
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()){
+                    long idAf = rs.getLong("id");
+                    long idUser = rs.getLong("pessoa_id");
+                    double peso = rs.getDouble("peso");
+                    double altura = rs.getDouble("altura");
+                    int idade = rs.getInt("idade");
+                    double pescoco = rs.getDouble("pescoco");
+                    double cintura = rs.getDouble("cintura");
+                    double quadril = rs.getDouble("quadril");
+                    double abdomen = rs.getDouble("abdomen");
+                    double bf = rs.getDouble("bf");
+                    double imc = rs.getDouble("imc");
+                    double tbm = rs.getDouble("tbm");
+                    double massaGorda = rs.getDouble("massaGorda");
+                    double massaMagra = rs.getDouble("massaMagra");
+                    Date criacao = rs.getDate("dataCriacao");
+                    Date modificacao = rs.getDate("dataModificacao");
+
+                    AvaliacaoFisica af = new AvaliacaoFisica();
+                    af.setId(idAf);
+                    af.setIdUser(idUser);
+                    af.setPeso(peso);
+                    af.setAltura(altura);
+                    af.setIdade(idade);
+                    af.setPescoco(pescoco);
+                    af.setCintura(cintura);
+                    af.setQuadril(quadril);
+                    af.setAbdomen(abdomen);
+                    af.setBf(bf);
+                    af.setImc(imc);
+                    af.setTbm(tbm);
+                    af.setMassaGorda(massaGorda);
+                    af.setMassaMagra(massaMagra);
+                    af.setDataCriacao(criacao.toLocalDate());
+                    af.setDataModificacao(modificacao.toLocalDate());
+                    result.add(af);
+                }
+            }
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return  result;
     }
 }

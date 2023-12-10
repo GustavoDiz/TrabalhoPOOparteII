@@ -190,6 +190,15 @@ public class JMenu {
                     jPhysicalAssessment();
                     break;
                 case 2:
+                    StringBuilder text = new StringBuilder();
+                    text.append("Peso\tAltura\tIdade\tPescoço\tCintura\tQuadril\tAbdomem\tBf\tImc\tTbm\tMassa Gorda\tMassa Magra\n");
+                    ArrayList<AvaliacaoFisica> afs = avaliacaoFisicaDAO.myList(userlogged.getId());
+                    for (AvaliacaoFisica af:
+                            afs) {
+                        System.out.println(af.toString());
+                        text.append(af.toString());
+                    }
+                    JOptionPane.showMessageDialog(null,new JTextArea(text.toString()));
                     break;
                 default:
                     jError("Opção Inválida, Por favor Insira novamente");

@@ -315,4 +315,10 @@ public class AvaliacaoFisica {
     public int hashCode() {
         return Objects.hash(id, user, peso, altura, idade, pescoco, cintura, quadril, abdomen, bf, imc, tbm, massaGorda, massaMagra, dataCriacao, dataModificacao);
     }
+
+    @Override
+    public String toString() {
+        return String.format("%.2f\t%.2f\t%d\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n",
+                peso, altura, idade, pescoco, cintura, quadril, abdomen, bf, imc, tbm, massaGorda, massaMagra);
+    }
 }
