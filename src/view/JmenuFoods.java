@@ -1,6 +1,11 @@
 package view;
 
 import model.*;
+import model.AlimentoReceita;
+import model.AlimentoReceitaDAO;
+import model.Preferencia;
+import model.PreferenciaDAO;
+import model.Mensagem;
 
 import javax.swing.*;
 
@@ -17,6 +22,7 @@ public class JmenuFoods {
     AlimentoReceitaDAO foods = new AlimentoReceitaDAO();
     TipoDietaDAO diets = new TipoDietaDAO();
 
+    PreferenciaDAO preferenciaDAO = new PreferenciaDAO();
     public JmenuFoods() {
         jDiet();
     }
@@ -49,13 +55,68 @@ public class JmenuFoods {
                     jMenusRecipe();
                     break;
                 case 5:
-//                    jPreferences();
+                    jPreferences();
                     break;
                 default:
                     jError("Opção Inválida, Por favor insira novamente.");
                     break;
             }
         } while (op != 0);
+    }
+
+    private void jPreferences() {
+        int op;
+        String txt = "O que deseja? " +
+                "\n 1 - Criar Preferencias " +
+                "\n 2 - Ver suas Preferencias"+
+                "\n 3 - Excluir suas Preferencias"+
+                "\n 0 - Sair";
+        do{
+            op = Integer.parseInt(JOptionPane.showInputDialog(txt));
+            switch (op) {
+                case 0:
+                    break;
+                case 1:
+                    jCreatePreference();
+                    break;
+                case 2:
+                    jMyPreferences();
+                    break;
+                case 3:
+                    String id = JOptionPane.showInputDialog("Id do Alimento");
+                    Preferencia delete = new Preferencia();
+                    delete.setId(Long.parseLong(id));
+                    preferenciaDAO.delete(delete);
+                    break;
+                default:
+                    jError("Opção Inválida");
+                    break;
+            }
+        }while (op != 0);
+    }
+
+    private void jMyPreferences() {
+        ArrayList<Preferencia> myPreferences = preferenciaDAO.myPreferences(userlogged.getId());
+        StringBuilder txt = new StringBuilder();
+        for (Preferencia p:
+                myPreferences) {
+            txt.append('\n');
+            txt.append(p.toString());
+
+
+        }
+        jConfirmation(String.valueOf(txt));
+    }
+
+    private void jCreatePreference() {
+        Preferencia newPreferencia = new Preferencia();
+        String idFood = JOptionPane.showInputDialog("Id do Alimento");
+        AlimentoReceita foodPreferencia = foods.getRecipeByIDFood(Integer.parseInt(idFood));
+        newPreferencia.setUserId(userlogged.getId());
+        newPreferencia.setFoodId(foodPreferencia.getId());
+        newPreferencia.setDataModificacao(LocalDate.now());
+        newPreferencia.setDataCriacao(LocalDate.now());
+        preferenciaDAO.add(newPreferencia);
     }
 
     public void jMenusRecipe() {
