@@ -113,17 +113,15 @@ public class JMenu {
                 case 2:
                     jUpdate();
                     break;
-
-//                case 3:
-//                    jMenuPhysicalAssessment();
-//                    break;
-
+                case 3:
+                    jMenuPhysicalAssessment();
+                    break;
                 case 4:
                   new JmenuFoods();
                   break;
-//                case 5:
-//                    jSocial();
-//                    break;
+                case 5:
+                    new JMenuSocial();
+                    break;
                 default:
                     jError("Opção Inválida, Por favor insira novamente.");
                     break;
@@ -206,6 +204,36 @@ public class JMenu {
         AvaliacaoFisica newAssessment = new AvaliacaoFisica();
         newAssessment.setUser(userlogged);
         newAssessment.setIdUser(userlogged.getId());
+        newAssessment.setPeso(Double.parseDouble(JOptionPane.showInputDialog("Insira o Peso em kg (Exemplo: 67.0)")));
+        newAssessment.setAltura(Double.parseDouble(JOptionPane.showInputDialog("Insira a altura em cm (Exemplo: 180)")));
+        newAssessment.setIdade(Integer.parseInt(JOptionPane.showInputDialog("Insira a sua idade")));
+        newAssessment.setPescoco(Double.parseDouble(JOptionPane.showInputDialog("Insira a medida do seu Pescoço em cm (Exemplo: 20.5)")));
+        newAssessment.setCintura(Double.parseDouble(JOptionPane.showInputDialog("Insira a medida da sua cintura em cm (Exemplo: 40.2)")));
+        newAssessment.setQuadril(Double.parseDouble(JOptionPane.showInputDialog("Insira a medida do quadril")));
+        newAssessment.setAbdomen(Double.parseDouble(JOptionPane.showInputDialog("Insira a do seu Abdômen (Exemplo: 43.5)")));
+        newAssessment.calculateIMC();
+        newAssessment.calculateTMB(Double.parseDouble(JOptionPane.showInputDialog(tax)));
+        newAssessment.calculateBF();
+        newAssessment.setDataCriacao(LocalDate.now());
+        newAssessment.setDataModificacao(LocalDate.now());
+        avaliacaoFisicaDAO.add(newAssessment);
+        jPhysicalReport(newAssessment);
+    }
+
+    public void jPhysicalReport(AvaliacaoFisica avaliacaoFisica) {
+        String type = avaliacaoFisica.idealBodyFat();
+        String report = "Relatório Avaliação Física " +
+                "\n Nome " + avaliacaoFisica.getUser().getNome() +
+                "\n Idade " + avaliacaoFisica.getIdade() +
+                "\n Altura " + avaliacaoFisica.getAltura() +
+                "\n Peso " + avaliacaoFisica.getPeso() +
+                "\n IMC " + avaliacaoFisica.getImc() +
+                "\n TMB " + avaliacaoFisica.getTbm() +
+                "\n Massa Magra " + avaliacaoFisica.getMassaMagra() +
+                "\n Massa Gorda " + avaliacaoFisica.getMassaGorda() +
+                "\n %BF " + avaliacaoFisica.getBf() +
+                "\n Avalição Gordura Corporal " + type;
+        jConfirmation(report);
     }
 
 }
