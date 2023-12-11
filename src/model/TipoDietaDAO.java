@@ -3,7 +3,6 @@ package model;
 import utils.ConnectionFactory;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class TipoDietaDAO implements DAO<TipoDieta>{
@@ -65,6 +64,47 @@ public class TipoDietaDAO implements DAO<TipoDieta>{
             throw  new RuntimeException(e);
         }
         return dietas;
+    }
+
+    public TipoDieta getDietByID(long index){
+        String sql = "select * from tipodieta where id = ?";
+
+        try (
+                Connection connection = new ConnectionFactory().getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql);
+        ) {
+            stmt.setLong(1, index);
+
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    Long id = rs.getLong("id");
+                    String nome = rs.getString("nome");
+                    double carboidrato = rs.getDouble("carboidrato");
+                    double proteina = rs.getDouble("proteina");
+                    double gordura = rs.getDouble("gordura");
+                    Date criacao = rs.getDate("dataCriacao");
+                    Date modificacao = rs.getDate("dataModificacao");
+
+                    TipoDieta p = new TipoDieta();
+                    p.setId(id);
+                    p.setNome(nome);
+                    p.setCarboidrato(Double.parseDouble(String.valueOf(carboidrato)));
+                    p.setProteina(Double.parseDouble(String.valueOf(proteina)));
+                    p.setGordura(Double.parseDouble(String.valueOf(gordura)));
+                    p.setDataCriacao(criacao.toLocalDate());
+                    p.setDataModificacao(modificacao.toLocalDate());
+                    return p;
+                }
+            }catch (SQLException e){
+                throw  new RuntimeException(e);
+            }
+
+
+        }catch (SQLException e){
+            throw  new RuntimeException(e);
+        }
+        return null;
+
     }
 
     @Override

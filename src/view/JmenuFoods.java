@@ -5,10 +5,10 @@ import model.AlimentoReceita;
 import model.AlimentoReceitaDAO;
 import model.Preferencia;
 import model.PreferenciaDAO;
-import model.Mensagem;
 
 import javax.swing.*;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -46,7 +46,7 @@ public class JmenuFoods {
                     jTypeDiet();
                     break;
                 case 2:
-                    //                   jRegisterDiet();
+                    jRegisterDiet();
                     break;
                 case 3:
                     //                   jMenuAddMeal();
@@ -62,6 +62,81 @@ public class JmenuFoods {
                     break;
             }
         } while (op != 0);
+    }
+
+
+    private void jRegisterDiet(){
+        int op;
+        RegistroDietaDAO registrodietaacc = new RegistroDietaDAO();
+        AvaliacaoFisicaDAO physical =  new AvaliacaoFisicaDAO();
+        TipoDietaDAO dietasearch = new TipoDietaDAO();
+        TipoDieta dietaset = new TipoDieta();
+
+        StringBuilder txt = new StringBuilder();
+        txt.append("Menu Dieta, Selecione a opção");
+        txt.append("\n 1 - Ver Dieta Atual");
+        txt.append("\n 2 - Adicionar Dieta");
+        txt.append("\n 3 - Apagar Dieta");
+        txt.append("\n 0 - Sair");
+        do{
+            op = Integer.parseInt(JOptionPane.showInputDialog(txt));
+            switch (op){
+                case 1:
+                    RegistroDieta currentDiet = registrodietaacc.getRegisterByUser(userlogged.getId());
+                    if (currentDiet == null){
+                        jError("Você não possui nenhuma dieta.");
+                    }else{
+                        jConfirmation(currentDiet.toString());
+                    }
+                    break;
+                case 2:
+                    if (registrodietaacc.getRegisterByUser(userlogged.getId()) == null){
+                        long opc = Long.parseLong(JOptionPane.showInputDialog("Qual o ID do tipo da dieta que você quer?"));
+
+                        dietaset = dietasearch.getDietByID(opc);
+                        System.out.println(dietaset.toString());
+                        if(dietaset != null){
+                            RegistroDietaDAO addDieta = new RegistroDietaDAO();
+                            RegistroDieta newDiet = new RegistroDieta();
+
+                            newDiet.setUserID(userlogged.getId());
+                            newDiet.setPhysicalAssessmentID(physical.getPhysicalAssessmentID(userlogged.getId()));
+                            newDiet.setTipoDietaid(dietaset.getId());
+                            newDiet.setGoal(Integer.parseInt(JOptionPane.showInputDialog("Qual seu objetivo: \n 1 - Manter o Peso \n 2 - Perder Peso \n 3 - Ganhar Peso")));
+                            double calories = (4 * dietaset.getCarboidrato()) + (4 * dietaset.getProteina()) + (9 * dietaset.getGordura());
+                            newDiet.setCalories(calories);
+                            newDiet.setnMeals(Integer.parseInt(JOptionPane.showInputDialog("Quantidade de Refeições")));
+                            newDiet.setDataCriacao(LocalDate.now());
+                            newDiet.setDataModificacao(LocalDate.now());
+
+                            addDieta.add(newDiet);
+                        }
+                    }else{
+                        jError("Ja adicioda a Dieta, se tiver alguma alteração Atualize as Informações");
+                    }
+                    break;
+                case 3:
+                    if(!(registrodietaacc.getRegisterByUser(userlogged.getId()) == null)){
+                        if(dietaset != null){
+                            RegistroDietaDAO pegarDieta = new RegistroDietaDAO();
+                            RegistroDieta getDiet = new RegistroDieta();
+
+                            getDiet = pegarDieta.getRegisterByUser(userlogged.getId());
+
+                            pegarDieta.delete(getDiet);
+                        }
+                    }else{
+                        jError("Você não tem possui dieta!!");
+
+                    }
+                    break;
+                case 0:
+                    break;
+                default:
+                    jError("Opção Inválida,Insira novamente");
+                    break;
+            }
+        }while (op != 0);
     }
 
     private void jPreferences() {
@@ -93,6 +168,16 @@ public class JmenuFoods {
                     break;
             }
         }while (op != 0);
+    }
+
+    public void jUpdateRegisterDiet(RegistroDieta elemento){
+
+
+
+
+
+
+
     }
 
     private void jMyPreferences() {

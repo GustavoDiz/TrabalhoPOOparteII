@@ -164,4 +164,23 @@ public class AvaliacaoFisicaDAO implements DAO<AvaliacaoFisica> {
         }
         return  result;
     }
+    public long getPhysicalAssessmentID (long id){
+        String sql = "select * from avaliacaofisica where pessoa_id = ? order by dataCriacao desc limit 1";
+        try (Connection connection = new ConnectionFactory().getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1,id);
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()){
+                    long idAf = rs.getLong("id");
+
+                    return idAf;
+                }
+            }
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return 0;
+    }
+
 }
