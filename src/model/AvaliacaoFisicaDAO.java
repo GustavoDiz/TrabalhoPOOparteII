@@ -51,40 +51,23 @@ public class AvaliacaoFisicaDAO implements DAO<AvaliacaoFisica> {
         ) {
 
             while (rs.next()){
-                long id = rs.getLong("id");
-                long idUser = rs.getLong("pessoa_id");
-                double peso = rs.getDouble("peso");
-                double altura = rs.getDouble("altura");
-                int idade = rs.getInt("idade");
-                double pescoco = rs.getDouble("pescoco");
-                double cintura = rs.getDouble("cintura");
-                double quadril = rs.getDouble("quadril");
-                double abdomen = rs.getDouble("abdomen");
-                double bf = rs.getDouble("bf");
-                double imc = rs.getDouble("imc");
-                double tbm = rs.getDouble("tbm");
-                double massaGorda = rs.getDouble("massaGorda");
-                double massaMagra = rs.getDouble("massaMagra");
-                Date criacao = rs.getDate("dataCriacao");
-                Date modificacao = rs.getDate("dataModificacao");
-
                 AvaliacaoFisica af = new AvaliacaoFisica();
-                af.setId(id);
-                af.setIdUser(idUser);
-                af.setPeso(peso);
-                af.setAltura(altura);
-                af.setIdade(idade);
-                af.setPescoco(pescoco);
-                af.setCintura(cintura);
-                af.setQuadril(quadril);
-                af.setAbdomen(abdomen);
-                af.setBf(bf);
-                af.setImc(imc);
-                af.setTbm(tbm);
-                af.setMassaGorda(massaGorda);
-                af.setMassaMagra(massaMagra);
-                af.setDataCriacao(criacao.toLocalDate());
-                af.setDataModificacao(modificacao.toLocalDate());
+                af.setId(rs.getLong("id"));
+                af.setIdUser(rs.getLong("pessoa_id"));
+                af.setPeso( rs.getDouble("peso"));
+                af.setAltura(rs.getDouble("altura"));
+                af.setIdade(rs.getInt("idade"));
+                af.setPescoco(rs.getDouble("pescoco"));
+                af.setCintura(rs.getDouble("cintura"));
+                af.setQuadril(rs.getDouble("quadril"));
+                af.setAbdomen(rs.getDouble("abdomen"));
+                af.setBf(rs.getDouble("bf"));
+                af.setImc(rs.getDouble("imc"));
+                af.setTbm(rs.getDouble("tbm"));
+                af.setMassaGorda(rs.getDouble("massaGorda"));
+                af.setMassaMagra(rs.getDouble("massaMagra"));
+                af.setDataCriacao(rs.getDate("dataCriacao").toLocalDate());
+                af.setDataModificacao(rs.getDate("dataModificacao").toLocalDate());
 
                 avaliacoes.add(af);
             }
@@ -122,40 +105,23 @@ public class AvaliacaoFisicaDAO implements DAO<AvaliacaoFisica> {
             stmt.setLong(1,id);
             try(ResultSet rs = stmt.executeQuery()){
                 while (rs.next()){
-                    long idAf = rs.getLong("id");
-                    long idUser = rs.getLong("pessoa_id");
-                    double peso = rs.getDouble("peso");
-                    double altura = rs.getDouble("altura");
-                    int idade = rs.getInt("idade");
-                    double pescoco = rs.getDouble("pescoco");
-                    double cintura = rs.getDouble("cintura");
-                    double quadril = rs.getDouble("quadril");
-                    double abdomen = rs.getDouble("abdomen");
-                    double bf = rs.getDouble("bf");
-                    double imc = rs.getDouble("imc");
-                    double tbm = rs.getDouble("tbm");
-                    double massaGorda = rs.getDouble("massaGorda");
-                    double massaMagra = rs.getDouble("massaMagra");
-                    Date criacao = rs.getDate("dataCriacao");
-                    Date modificacao = rs.getDate("dataModificacao");
-
                     AvaliacaoFisica af = new AvaliacaoFisica();
-                    af.setId(idAf);
-                    af.setIdUser(idUser);
-                    af.setPeso(peso);
-                    af.setAltura(altura);
-                    af.setIdade(idade);
-                    af.setPescoco(pescoco);
-                    af.setCintura(cintura);
-                    af.setQuadril(quadril);
-                    af.setAbdomen(abdomen);
-                    af.setBf(bf);
-                    af.setImc(imc);
-                    af.setTbm(tbm);
-                    af.setMassaGorda(massaGorda);
-                    af.setMassaMagra(massaMagra);
-                    af.setDataCriacao(criacao.toLocalDate());
-                    af.setDataModificacao(modificacao.toLocalDate());
+                    af.setId(rs.getLong("id"));
+                    af.setIdUser(rs.getLong("pessoa_id"));
+                    af.setPeso(rs.getDouble("peso"));
+                    af.setAltura(rs.getDouble("altura"));
+                    af.setIdade(rs.getInt("idade"));
+                    af.setPescoco(rs.getDouble("pescoco"));
+                    af.setCintura(rs.getDouble("cintura"));
+                    af.setQuadril(rs.getDouble("quadril"));
+                    af.setAbdomen(rs.getDouble("abdomen"));
+                    af.setBf(rs.getDouble("bf"));
+                    af.setImc(rs.getDouble("imc"));
+                    af.setTbm(rs.getDouble("tbm"));
+                    af.setMassaGorda(rs.getDouble("massaGorda"));
+                    af.setMassaMagra(rs.getDouble("massaMagra"));
+                    af.setDataCriacao(rs.getDate("dataCriacao").toLocalDate());
+                    af.setDataModificacao(rs.getDate("dataModificacao").toLocalDate());
                     result.add(af);
                 }
             }
@@ -171,9 +137,7 @@ public class AvaliacaoFisicaDAO implements DAO<AvaliacaoFisica> {
             stmt.setLong(1,id);
             try(ResultSet rs = stmt.executeQuery()){
                 while (rs.next()){
-                    long idAf = rs.getLong("id");
-
-                    return idAf;
+                    return rs.getLong("id");
                 }
             }
         }catch (SQLException e) {

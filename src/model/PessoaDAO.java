@@ -2,11 +2,9 @@ package model;
 
 import utils.ConnectionFactory;
 
-import javax.swing.text.AbstractDocument;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class PessoaDAO implements DAO<Pessoa>{
     @Override
@@ -47,27 +45,16 @@ public class PessoaDAO implements DAO<Pessoa>{
                 ) {
 
             while (rs.next()){
-                Long id = rs.getLong("id");
-                String nome = rs.getString("nome");
-                String sexo = rs.getString("sexo");
-                Date data = rs.getDate("nascimento");
-                String usuario = rs.getString("usuario");
-                String senha = rs.getString("senha");
-                Date criacao = rs.getDate("dataCriacao");
-                Date modificacao = rs.getDate("dataModificacao");
-                LocalDate nascimento = data.toLocalDate();
-
                 Pessoa p = new Pessoa();
-                p.setId(id);
-                p.setNome(nome);
-                p.setSexo(sexo.charAt(0));
-                p.setNascimento(nascimento);
-                p.setUsuario(usuario);
-                p.setSenha(senha);
-                p.setDataCriacao(criacao.toLocalDate());
-                p.setDataModificacao(modificacao.toLocalDate());
+                p.setId(rs.getLong("id"));
+                p.setNome(rs.getString("nome"));
+                p.setSexo(rs.getString("sexo").charAt(0));
+                p.setNascimento(rs.getDate("nascimento").toLocalDate());
+                p.setUsuario(rs.getString("usuario"));
+                p.setSenha(rs.getString("senha"));
+                p.setDataCriacao(rs.getDate("dataCriacao").toLocalDate());
+                p.setDataModificacao(rs.getDate("dataModificacao").toLocalDate());
                 pessoas.add(p);
-
             }
         }catch (SQLException e){
             throw  new RuntimeException(e);
@@ -189,25 +176,15 @@ public class PessoaDAO implements DAO<Pessoa>{
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Long id = rs.getLong("id");
-                    String nome = rs.getString("nome");
-                    String sexo = rs.getString("sexo");
-                    Date data = rs.getDate("nascimento");
-                    String usuario = rs.getString("usuario");
-                    String senha = rs.getString("senha");
-                    Date criacao = rs.getDate("dataCriacao");
-                    Date modificacao = rs.getDate("dataModificacao");
-                    LocalDate nascimento = data.toLocalDate();
-
                     Pessoa p = new Pessoa();
-                    p.setId(id);
-                    p.setNome(nome);
-                    p.setSexo(sexo.charAt(0));
-                    p.setNascimento(nascimento);
-                    p.setUsuario(usuario);
-                    p.setSenha(senha);
-                    p.setDataCriacao(criacao.toLocalDate());
-                    p.setDataModificacao(modificacao.toLocalDate());
+                    p.setId(rs.getLong("id"));
+                    p.setNome(rs.getString("nome"));
+                    p.setSexo(rs.getString("sexo").charAt(0));
+                    p.setNascimento(rs.getDate("nascimento").toLocalDate());
+                    p.setUsuario(rs.getString("usuario"));
+                    p.setSenha(rs.getString("senha"));
+                    p.setDataCriacao(rs.getDate("dataCriacao").toLocalDate());
+                    p.setDataModificacao(rs.getDate("dataModificacao").toLocalDate());
 
                     return p;
                 }
@@ -227,25 +204,15 @@ public class PessoaDAO implements DAO<Pessoa>{
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Long id = rs.getLong("id");
-                    String nome = rs.getString("nome");
-                    String sexo = rs.getString("sexo");
-                    Date data = rs.getDate("nascimento");
-                    String usuario = rs.getString("usuario");
-                    String senha = rs.getString("senha");
-                    Date criacao = rs.getDate("dataCriacao");
-                    Date modificacao = rs.getDate("dataModificacao");
-                    LocalDate nascimento = data.toLocalDate();
-
                     Pessoa p = new Pessoa();
-                    p.setId(id);
-                    p.setNome(nome);
-                    p.setSexo(sexo.charAt(0));
-                    p.setNascimento(nascimento);
-                    p.setUsuario(usuario);
-                    p.setSenha(senha);
-                    p.setDataCriacao(criacao.toLocalDate());
-                    p.setDataModificacao(modificacao.toLocalDate());
+                    p.setId(rs.getLong("id"));
+                    p.setNome(rs.getString("nome"));
+                    p.setSexo(rs.getString("sexo").charAt(0));
+                    p.setNascimento(rs.getDate("nascimento").toLocalDate());
+                    p.setUsuario(rs.getString("usuario"));
+                    p.setSenha(rs.getString("senha"));
+                    p.setDataCriacao(rs.getDate("dataCriacao").toLocalDate());
+                    p.setDataModificacao(rs.getDate("dataModificacao").toLocalDate());
 
                     return p;
                 }

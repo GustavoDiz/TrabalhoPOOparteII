@@ -47,25 +47,16 @@ public class AlimentoReceitaDAO implements DAO<AlimentoReceita>{
         ) {
 
             while (rs.next()){
-                Long id = rs.getLong("id");
-                String nome = rs.getString("nome");
-                String carboidratos = rs.getString("carboidratos");
-                String proteinas = rs.getString("proteinas");
-                String gorduras = rs.getString("gorduras");
-                String porcao = rs.getString("porcao");
-                Date criacao = rs.getDate("dataCriacao");
-                Date modificacao = rs.getDate("dataModificacao");
-
                 AlimentoReceita p = new AlimentoReceita();
-                p.setId(id);
-                p.setNome(nome);
-                p.setCarboidratos(Double.parseDouble(carboidratos));
-                p.setProteinas(Double.parseDouble(proteinas));
-                p.setGorduras(Double.parseDouble(gorduras));
-                p.setPorcao(Double.parseDouble(porcao));
+                p.setId(rs.getLong("id"));
+                p.setNome(rs.getString("nome"));
+                p.setCarboidratos(Double.parseDouble(rs.getString("carboidratos")));
+                p.setProteinas(Double.parseDouble(rs.getString("proteinas")));
+                p.setGorduras(Double.parseDouble(rs.getString("gorduras")));
+                p.setPorcao(Double.parseDouble(rs.getString("porcao")));
                 p.setCalorias();
-                p.setDataCriacao(criacao.toLocalDate());
-                p.setDataModificacao(modificacao.toLocalDate());
+                p.setDataCriacao(rs.getDate("dataCriacao").toLocalDate());
+                p.setDataModificacao(rs.getDate("dataModificacao").toLocalDate());
                 alimentos.add(p);
             }
         }catch (SQLException e){
@@ -192,15 +183,15 @@ public class AlimentoReceitaDAO implements DAO<AlimentoReceita>{
                 Date modificacao = rs.getDate("dataModificacao");
 
                 AlimentoReceita p = new AlimentoReceita();
-                p.setId(id);
-                p.setNome(nome);
-                p.setCarboidratos(Double.parseDouble(carboidratos));
-                p.setProteinas(Double.parseDouble(proteinas));
-                p.setGorduras(Double.parseDouble(gorduras));
-                p.setPorcao(Double.parseDouble(porcao));
+                p.setId(rs.getLong("id"));
+                p.setNome(rs.getString("nome"));
+                p.setCarboidratos(Double.parseDouble(rs.getString("carboidratos")));
+                p.setProteinas(Double.parseDouble(rs.getString("proteinas")));
+                p.setGorduras(Double.parseDouble(rs.getString("gorduras")));
+                p.setPorcao(Double.parseDouble(rs.getString("porcao")));
                 p.setCalorias();
-                p.setDataCriacao(criacao.toLocalDate());
-                p.setDataModificacao(modificacao.toLocalDate());
+                p.setDataCriacao(rs.getDate("dataCriacao").toLocalDate());
+                p.setDataModificacao(rs.getDate("dataModificacao").toLocalDate());
                 return p;
             }
         }catch (SQLException e){
