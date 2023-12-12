@@ -181,9 +181,9 @@ public class JmenuFoods {
     }
 
     private void jMyPreferences() {
-        ArrayList<Preferencia> myPreferences = preferenciaDAO.myPreferences(userlogged.getId());
+        ArrayList<AlimentoReceita> myPreferences = preferenciaDAO.myPreferences(userlogged.getId());
         StringBuilder txt = new StringBuilder();
-        for (Preferencia p:
+        for (AlimentoReceita p:
                 myPreferences) {
             txt.append('\n');
             txt.append(p.toString());

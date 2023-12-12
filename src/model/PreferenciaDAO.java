@@ -55,9 +55,9 @@ public class PreferenciaDAO  implements DAO<Preferencia>{
         return null;
     }
 
-    public ArrayList<Preferencia> myPreferences(long id){
-        ArrayList<Preferencia> preferencias = new ArrayList<>();
-        String sql = "SELECT * FROM preferencias WHERE user_id = ?";
+    public ArrayList<AlimentoReceita> myPreferences(long id){
+        ArrayList<AlimentoReceita> preferenciasfoods = new ArrayList<>();
+        String sql = "SELECT f.* FROM preferencias p JOIN alimentoreceita f ON p.food_id = f.id  WHERE user_id = ?";
         try (
                 Connection connection = new ConnectionFactory().getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql);
@@ -65,19 +65,24 @@ public class PreferenciaDAO  implements DAO<Preferencia>{
             stmt.setLong(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Preferencia preferencia = new Preferencia();
-                    preferencia.setUserId(rs.getLong("user_id"));
-                    preferencia.setFoodId(rs.getLong("food_id"));
-                    preferencia.setDataCriacao(rs.getDate("dataCriacao").toLocalDate());
-                    preferencia.setDataModificacao(rs.getDate("dataModificacao").toLocalDate());
+                    AlimentoReceita p = new AlimentoReceita();
+                    p.setId(rs.getLong("id"));
+                    p.setNome(rs.getString("nome"));
+                    p.setCarboidratos(Double.parseDouble(rs.getString("carboidratos")));
+                    p.setProteinas(Double.parseDouble(rs.getString("proteinas")));
+                    p.setGorduras(Double.parseDouble(rs.getString("gorduras")));
+                    p.setPorcao(Double.parseDouble(rs.getString("porcao")));
+                    p.setCalorias();
+                    p.setDataCriacao(rs.getDate("dataCriacao").toLocalDate());
+                    p.setDataModificacao(rs.getDate("dataModificacao").toLocalDate());
 
-                    preferencias.add(preferencia);
+                    preferenciasfoods.add(p);
                 }
             }
         }catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return  preferencias;
+        return  preferenciasfoods;
     }
 
 }
