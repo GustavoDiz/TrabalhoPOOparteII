@@ -173,14 +173,6 @@ public class AlimentoReceitaDAO implements DAO<AlimentoReceita>{
 
         try(ResultSet rs = stmt.executeQuery()){
             while (rs.next()) {
-                Long id = rs.getLong("id");
-                String nome = rs.getString("nome");
-                String carboidratos = rs.getString("carboidratos");
-                String proteinas = rs.getString("proteinas");
-                String gorduras = rs.getString("gorduras");
-                String porcao = rs.getString("porcao");
-                Date criacao = rs.getDate("dataCriacao");
-                Date modificacao = rs.getDate("dataModificacao");
 
                 AlimentoReceita p = new AlimentoReceita();
                 p.setId(rs.getLong("id"));
@@ -203,7 +195,6 @@ public class AlimentoReceitaDAO implements DAO<AlimentoReceita>{
             throw  new RuntimeException(e);
         }
         return null;
-
     }
     @Override
     public AlimentoReceita delete(AlimentoReceita elemento) {
