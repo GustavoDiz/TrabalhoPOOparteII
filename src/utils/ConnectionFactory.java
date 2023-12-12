@@ -9,7 +9,7 @@ public class ConnectionFactory {
         try {
             Properties properties = new Properties();
             properties.setProperty("user", "root");
-            properties.setProperty("password", "Gabriel880.");
+            properties.setProperty("password", "admwindows");
             properties.setProperty("useSSL", "false");
             properties.setProperty("useTimezone", "true");
             properties.setProperty("serverTimezone", "UTC");

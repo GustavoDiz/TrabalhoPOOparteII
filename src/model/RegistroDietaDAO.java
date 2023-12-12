@@ -17,9 +17,9 @@ public class RegistroDietaDAO implements DAO<RegistroDieta>{
              PreparedStatement stmt = connection.prepareStatement(sql)){
 
             stmt.setLong(1, elemento.getUserID());
-            stmt.setString(2, String.valueOf(elemento.getPhysicalAssessmentID()));
-            stmt.setString(3, String.valueOf(elemento.getTipoDietaid()));
-            stmt.setString(4, String.valueOf(elemento.getGoal()));
+            stmt.setLong(2, elemento.getPhysicalAssessmentID());
+            stmt.setLong(3, elemento.getTipoDietaid());
+            stmt.setLong(4, elemento.getGoal());
             stmt.setDouble(5, elemento.getCalories());
             stmt.setLong(6, elemento.getnMeals());
             stmt.setDate(7,java.sql.Date.valueOf(elemento.getDataCriacao()));

@@ -97,11 +97,34 @@ public class RefeicaoDAO implements DAO<Refeicao> {
 
     @Override
     public Refeicao update(Refeicao elemento, int op) {
-        return null;
+        String sql = "UPDATE refeicao SET calorias=?,gordura=?,carboidrato=?,proteina=? WHERE id = ?";
+        try (Connection connection = new ConnectionFactory().getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setDouble(1,elemento.getCalorias());
+            stmt.setDouble(2,elemento.getGordura());
+            stmt.setDouble(3,elemento.getCarboidrato());
+            stmt.setDouble(4,elemento.getProteina());
+            stmt.setLong(5,elemento.getId());
+            stmt.execute();
+
+            System.out.println("Elemento Atualizado com sucesso.");
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return elemento;
     }
 
     @Override
     public Refeicao delete(Refeicao elemento) {
+        String sql = "DELETE FROM refeicao WHERE id = ?";
+        try (Connection connection = new ConnectionFactory().getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)){
+            stmt.setLong(1,elemento.getId());
+            stmt.execute();
+            System.out.println("Elemento excluído com sucesso.");
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
         return null;
     }
 }

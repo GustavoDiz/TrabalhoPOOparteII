@@ -19,13 +19,13 @@ import static view.JMenu.userlogged;
 
 public class JmenuFoods {
 
-    AlimentoReceitaDAO foods = new AlimentoReceitaDAO();
-    TipoDietaDAO diets = new TipoDietaDAO();
-
-    PreferenciaDAO preferences = new PreferenciaDAO();
-    RegistroDietaDAO diets2 = new RegistroDietaDAO();
-
+    AlimentoRefeicaoDAO alimentoRefeicaoDAO = new AlimentoRefeicaoDAO();
+    AlimentoReceitaDAO alimentoReceitaDAO = new AlimentoReceitaDAO();
+    TipoDietaDAO tipoDietaDAO = new TipoDietaDAO();
     PreferenciaDAO preferenciaDAO = new PreferenciaDAO();
+    RegistroDietaDAO registroDietaDAO = new RegistroDietaDAO();
+    RefeicaoDAO refeicaoDAO = new RefeicaoDAO();
+
     public JmenuFoods() {
         jDiet();
     }
@@ -176,10 +176,9 @@ public class JmenuFoods {
                     break;
                 case 2:
                     Refeicao newMeal = new Refeicao();
-                    RefeicaoDAO addMeal = new RefeicaoDAO();
-                    diets2.getRegisterByUser(userlogged.getId());
+                    registroDietaDAO.getRegisterByUser(userlogged.getId());
 
-                    RegistroDieta userDiet = diets2.getRegisterByUser(userlogged.getId());
+                    RegistroDieta userDiet = registroDietaDAO.getRegisterByUser(userlogged.getId());
                     int mealsqt = userDiet.getnMeals();
                     double caloriesPerMeal = userDiet.getCalories()/mealsqt;
                     newMeal.setNome(JOptionPane.showInputDialog("Digite o Nome da Refeição"));
@@ -191,7 +190,7 @@ public class JmenuFoods {
                     newMeal.setProteina(caloriesPerMeal*0.3);
                     newMeal.setDataCriacao(LocalDate.now());
                     newMeal.setDataModificacao(LocalDate.now());
-                    addMeal.add(newMeal);
+                    refeicaoDAO.add(newMeal);
                     jConfirmation("Refeição Adicionada com Sucesso");
                     break;
                  case 3:
@@ -203,14 +202,10 @@ public class JmenuFoods {
                      break;
                 case 4:
                     StringBuilder delete = new StringBuilder();
-                    delete.append("Informe o ID do alimento a ser deletado");
+                    delete.append("Informe o ID da Refeição a ser deletado");
                     int index = Integer.parseInt(JOptionPane.showInputDialog(delete));
-                    meals.deleteMeal(index);
-                    if(meals.deleteMeal(index)){
-                        jConfirmation("Refeição Deletada Com Sucesso");
-                    }else{
-                        jError("Refeição não Encontrada!Por Favor Insira Novamente");
-                    }
+                    Refeicao deletedMeal = meals.getMealByID(index);
+                    meals.delete(deletedMeal);
                     break;
                 default:
                     jError("Opção Inválida, Por favor insira novamente.");
@@ -256,11 +251,11 @@ public class JmenuFoods {
         double fat = refeicao.getGordura();
         double carb = refeicao.getCarboidrato();
         double protein = refeicao.getProteina();
-        AlimentoReceita[] listFoods = preferences.getFoodsPreferencesByUser(userlogged);
-        if (listFoods[0] == null){
-            listFoods = foods.getAlimentore();
+        ArrayList<AlimentoReceita> listFoods = preferenciaDAO.myPreferences(userlogged.getId());
+        if (listFoods.isEmpty()){
+            listFoods = alimentoReceitaDAO.list();
         }
-        AlimentoReceita[] selectedFoods = mealFoods.getFoodsByMeal(refeicao);
+        ArrayList<AlimentoReceita> selectedFoods = alimentoRefeicaoDAO.getMeals(refeicao.getId());
         StringBuilder txt = new StringBuilder();
         txt.append("Refeição:  \t" + refeicao.getNome());
         txt.append("\n Calorias Restantes: \t" + calories);
@@ -268,44 +263,32 @@ public class JmenuFoods {
         txt.append("\n Quantidade de Carboidrato Restantes: \t" + carb);
         txt.append("\n Quantidade de Proteína Restantes: \t" + protein);
         txt.append("\n Digite o ID do alimento a ser adicionado");
-        txt.append("\n ### Lista de Alimentos ###");
+        txt.append("\n ### Lista de Alimentos ### \n");
+        txt.append("Id\tNome\tCarboidratos\tProteina\tGordura\tCalorias\tPorção\n");
         for (AlimentoReceita listFood : listFoods) {
             if (listFood != null) {
-                txt.append("\n ----------------");
-                txt.append("\n Id" + listFood.getId());
-                txt.append("\n Nome" + listFood.getNome());
-                txt.append("\n Calorias por porção" + listFood.getNome());
-                txt.append("\n Gordura por porção" + listFood.getGorduras());
-                txt.append("\n Carboidrato por porção" + listFood.getCarboidratos());
-                txt.append("\n Proteína por porção" + listFood.getProteinas());
-                txt.append("\n ----------------");
+                txt.append(listFood.toString());
             }
         }
 
-        txt.append("\n ### Alimentos Selecionado ###");
+        txt.append("\n ### Alimentos Selecionado ### \n");
         for (AlimentoReceita selectedFood : selectedFoods) {
             if (selectedFood != null) {
-                txt.append("\n ----------------");
-                txt.append("\n Id" + selectedFood.getId());
-                txt.append("\n Nome" + selectedFood.getNome());
-                txt.append("\n Calorias por porção" + selectedFood.getNome());
-                txt.append("\n Gordura por porção" + selectedFood.getGorduras());
-                txt.append("\n Carboidrato por porção" + selectedFood.getCarboidratos());
-                txt.append("\n Proteína por porção" + selectedFood.getProteinas());
-                txt.append("\n ----------------");
+                txt.append(selectedFood.toString());
             }
         }
         do {
-
-            index = Integer.parseInt(JOptionPane.showInputDialog(txt));
+            index = Integer.parseInt(JOptionPane.showInputDialog(null,new JTextArea(txt.toString())));
             if (index == 9){
                 break;
             }
-            AlimentoReceita foodAdd = foods.getRecipeByIDFood(index);
+            AlimentoReceita foodAdd = alimentoReceitaDAO.getRecipeByIDFood(index);
             if (foodAdd == null){
                 jError("Comida não encontrada!Por favor Insira Novamente o ID.");
             }else{
                 AlimentoRefeicao newFoodMeal = new AlimentoRefeicao();
+                newFoodMeal.setFood_id(foodAdd.getId());
+                newFoodMeal.setMeal_id(refeicao.getId());
                 newFoodMeal.setMeal(refeicao);
                 newFoodMeal.setFood(foodAdd);
                 newFoodMeal.setPortion(Double.parseDouble(JOptionPane.showInputDialog("Quantidade da Porçao")));
@@ -313,33 +296,26 @@ public class JmenuFoods {
                 newFoodMeal.setFat(foodAdd.getGorduras() * newFoodMeal.getPortion());
                 newFoodMeal.setProtein(foodAdd.getProteinas() * newFoodMeal.getPortion());
                 newFoodMeal.setDataCriacao(LocalDate.now());
-                mealFoods.addMealFood(newFoodMeal);
+                newFoodMeal.setDataModificacao(LocalDate.now());
+                alimentoRefeicaoDAO.add(newFoodMeal);
                 refeicao.setCalorias(refeicao.getCalorias() - (foodAdd.getCalorias() * newFoodMeal.getPortion()));
                 refeicao.setGordura(refeicao.getGordura() - foodAdd.getGorduras() * newFoodMeal.getPortion());
                 refeicao.setCarboidrato(refeicao.getCarboidrato() - foodAdd.getCarboidratos() * newFoodMeal.getPortion());
                 refeicao.setProteina(refeicao.getProteina() - foodAdd.getProteinas() * newFoodMeal.getPortion());
+                refeicaoDAO.update(refeicao,1);
             }
         }while (index != 9);
 
     }
 
     private void jMyPreferences() {
-        ArrayList<Preferencia> myPreferences = preferenciaDAO.myPreferences(userlogged.getId());
-        StringBuilder txt = new StringBuilder();
-        for (Preferencia p:
-                myPreferences) {
-            txt.append('\n');
-            txt.append(p.toString());
-
-
-        }
-        jConfirmation(String.valueOf(txt));
+        System.out.println("Teste");
     }
 
     private void jCreatePreference() {
         Preferencia newPreferencia = new Preferencia();
         String idFood = JOptionPane.showInputDialog("Id do Alimento");
-        AlimentoReceita foodPreferencia = foods.getRecipeByIDFood(Integer.parseInt(idFood));
+        AlimentoReceita foodPreferencia = alimentoReceitaDAO.getRecipeByIDFood(Integer.parseInt(idFood));
         newPreferencia.setUserId(userlogged.getId());
         newPreferencia.setFoodId(foodPreferencia.getId());
         newPreferencia.setDataModificacao(LocalDate.now());
@@ -366,7 +342,7 @@ public class JmenuFoods {
                 case 2:
 
                     int id = Integer.parseInt(JOptionPane.showInputDialog("Por favor, informe o ID do alimento"));
-                    AlimentoReceita alimento2 = foods.getRecipeByIDFood(id);
+                    AlimentoReceita alimento2 = alimentoReceitaDAO.getRecipeByIDFood(id);
                     if (alimento2 != null) {
                         jConfirmation("Dados do Alimento \n\n" + alimento2.toString());
                     } else {
@@ -378,14 +354,14 @@ public class JmenuFoods {
                     break;
                 case 4:
                     int idDelete = Integer.parseInt(JOptionPane.showInputDialog("Por favor, informe o ID desse alimento"));
-                    AlimentoReceita alimentoDelete = foods.getRecipeByIDFood(idDelete);
-                    foods.delete(alimentoDelete);
+                    AlimentoReceita alimentoDelete = alimentoReceitaDAO.getRecipeByIDFood(idDelete);
+                    alimentoReceitaDAO.delete(alimentoDelete);
                     break;
                 case 5:
                     StringBuilder elementos = new StringBuilder();
                     elementos.append("Id\tNome\tCarboidratos\tProteina\tGordura\tCalorias\tPorção\n");
                     ArrayList<AlimentoReceita> FoodsExamples = new ArrayList<>();
-                    FoodsExamples = foods.list();
+                    FoodsExamples = alimentoReceitaDAO.list();
 
                     if (!FoodsExamples.isEmpty()) {
                         for (AlimentoReceita alimento : FoodsExamples) {
@@ -408,7 +384,7 @@ public class JmenuFoods {
     private void jMenuAtt(){
         int id  = Integer.parseInt(JOptionPane.showInputDialog("Por favor, informe o ID do alimento"));
         AlimentoReceita alimentoUpdate  = new AlimentoReceita();
-        alimentoUpdate = foods.getRecipeByIDFood(id);
+        alimentoUpdate = alimentoReceitaDAO.getRecipeByIDFood(id);
 
         int op;
         String menuUpdate =
@@ -424,26 +400,26 @@ public class JmenuFoods {
             switch (op){
                 case 1:
                     alimentoUpdate.setNome(JOptionPane.showInputDialog("Insira o Novo nome"));
-                    foods.update(alimentoUpdate,op);
+                    alimentoReceitaDAO.update(alimentoUpdate,op);
                     break;
                 case 2:
                     alimentoUpdate.setCarboidratos(Double.parseDouble(JOptionPane.showInputDialog("Insira a nova data de nascimento Exemplo 25-09-1999")));
                     alimentoUpdate.setCalorias();
-                    foods.update(alimentoUpdate,op);
+                    alimentoReceitaDAO.update(alimentoUpdate,op);
                     break;
                 case 3:
                     alimentoUpdate.setProteinas(Double.parseDouble(JOptionPane.showInputDialog("Insira a nova quantidade de proteínas")));
                     alimentoUpdate.setCalorias();
-                    foods.update(alimentoUpdate,op);
+                    alimentoReceitaDAO.update(alimentoUpdate,op);
                     break;
                 case 4:
                     alimentoUpdate.setGorduras(Double.parseDouble(JOptionPane.showInputDialog("Insira a nova quantidade de gorduras")));
                     alimentoUpdate.setCalorias();
-                    foods.update(alimentoUpdate,op);
+                    alimentoReceitaDAO.update(alimentoUpdate,op);
                     break;
                 case 5:
                     alimentoUpdate.setPorcao(Double.parseDouble(JOptionPane.showInputDialog("Insira a nova porção")));
-                    foods.update(alimentoUpdate,op);
+                    alimentoReceitaDAO.update(alimentoUpdate,op);
                     break;
                 case 0:
                     break;
@@ -471,7 +447,7 @@ public class JmenuFoods {
                     StringBuilder dietss = new StringBuilder();
                     dietss.append("ID\tNome\tCarboidratos\t Proteina \tGorduras\n");
                     ArrayList<TipoDieta> diets11 = new ArrayList<>();
-                    diets11 = diets.list();
+                    diets11 = tipoDietaDAO.list();
 
                     if (!diets11.isEmpty()) {
                         for (TipoDieta d : diets11) {
@@ -502,7 +478,7 @@ public class JmenuFoods {
             newreceipss.setDataCriacao(LocalDate.now());
             newreceipss.setDataModificacao(LocalDate.now());
 
-            foods.add(newreceipss);
+            alimentoReceitaDAO.add(newreceipss);
             JOptionPane.showMessageDialog(null, "Alimento criado com sucesso");
         }
     }
@@ -519,7 +495,7 @@ public class JmenuFoods {
 
             System.out.println(newdiet);
 
-            diets.add(newdiet);
+            tipoDietaDAO.add(newdiet);
             JOptionPane.showMessageDialog(null, "Dieta base Adicionada com sucesso!!");
         }
     }
