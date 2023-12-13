@@ -279,7 +279,7 @@ public class JmenuFoods {
         }
         do {
             index = Integer.parseInt(JOptionPane.showInputDialog(null,new JTextArea(txt.toString())));
-            if (index == 9){
+            if (index == 0){
                 break;
             }
             AlimentoReceita foodAdd = alimentoReceitaDAO.getRecipeByIDFood(index);
@@ -304,7 +304,7 @@ public class JmenuFoods {
                 refeicao.setProteina(refeicao.getProteina() - foodAdd.getProteinas() * newFoodMeal.getPortion());
                 refeicaoDAO.update(refeicao,1);
             }
-        }while (index != 9);
+        }while (index != 0);
 
     }
 
