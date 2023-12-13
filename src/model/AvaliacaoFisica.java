@@ -184,10 +184,11 @@ public class AvaliacaoFisica {
         double result;
         DecimalFormat df = new DecimalFormat("0.00",new DecimalFormatSymbols(Locale.ENGLISH));
         if(user.getSexo() == 'M'){
-            result = 86.010 * Math.log((this.abdomen - this.pescoco)) - 70.041 * Math.log(this.altura) + 36.76;
+            result = (86.010 * Math.log10((this.abdomen - this.pescoco))) - (70.041 * Math.log10(this.altura)) + 36.76;
         }else{
-            result = 163.205 * Math.log((this.cintura + this.quadril)) - 97.684 * Math.log(this.altura) - 78.387;
+            result = 163.205 * Math.log10((this.cintura + this.quadril)) - 97.684 * Math.log10(this.altura) - 78.387;
         }
+        System.out.println(result);
         result = Double.parseDouble(df.format(result));
         this.setBf(result);
         this.setMassaGorda(Double.parseDouble(df.format((result/100) * this.peso)));
@@ -197,7 +198,7 @@ public class AvaliacaoFisica {
     public String idealBodyFat(){
         String type = null;
         int age = this.getIdade();
-        double bf = this.getBf();
+        double bf = Math.abs(this.getBf());
         if (user.getSexo() == 'M'){
             if (age >= 20 && age <= 29) {
                 if (bf < 11) {
